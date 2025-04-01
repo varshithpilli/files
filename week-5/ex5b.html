@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question 2</title>
+    <link rel="icon" href="apple-touch-icon.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: bisque;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            font-family: 'Segoe UI';
+            color: whitesmoke;
+            height: auto;
+            padding: 10px;
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px;
+        }
+
+        #text-area {
+            font-size: 20px;
+            height: 300px;
+            width: 700px;
+            text-align: center;
+            background: radial-gradient(circle at bottom, #FFA700, #FF8100, #FF6700, #FF4D00, #FF0000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        #button {
+            font-size: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #B07357;
+            height: 200px;
+            width: 700px;
+            border-radius: 15px;
+        }
+
+        #button:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="text-area">Trial text</div>
+        <div id="button">Random</div>
+    </div>
+
+    <script>
+        const quotes = [
+            "The only way to do great work is to love what you do.",
+            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+            "Believe you can and you’re halfway there.",
+            "Opportunities don't happen. You create them.",
+            "Don't watch the clock; do what it does. Keep going.",
+            "Difficulties in life are intended to make us better, not bitter.",
+            "Your time is limited, so don’t waste it living someone else’s life.",
+            "Success usually comes to those who are too busy to be looking for it.",
+            "Do what you can, with what you have, where you are.",
+            "Act as if what you do makes a difference. It does.",
+            "The best way to predict the future is to create it.",
+            "It always seems impossible until it's done.",
+            "Courage is not the absence of fear but rather the judgment that something else is more important than fear.", 
+            "The harder the battle, the sweeter the victory.",
+            "Start where you are. Use what you have. Do what you can.",
+            "Push yourself, because no one else is going to do it for you.",
+            "Don’t be pushed by your problems. Be led by your dreams.",
+            "I am not a product of my circumstances. I am a product of my decisions.",
+            "Everything you’ve ever wanted is on the other side of fear.",
+            "Little by little, one travels far."
+        ];
+
+        document.getElementById("button").addEventListener("click", function () {
+            const quote = Math.floor(Math.random() * 20);
+            document.getElementById("text-area").innerText = quotes[quote]
+
+        }); 
+    </script>
+</body>
+
+</html>

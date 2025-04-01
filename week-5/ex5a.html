@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question 1</title>
+    <link rel="icon" href="apple-touch-icon.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: bisque;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgb(37, 37, 37);
+            height: 300px;
+            width: 100px;
+            border-radius: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.9);
+        }
+
+        .signal {
+            height: 60px;
+            width: 60px;
+            margin: 20px;
+            border-radius: 30px;
+        }
+
+        #red {
+            background-color: rgb(207, 26, 26);
+            opacity: 0.3;
+        }
+
+        #yellow {
+            background-color: rgb(240, 225, 13);
+            opacity: 0.3;
+        }
+
+        #green {
+            background-color: rgb(8, 113, 8);
+            opacity: 0.3;
+        }
+
+        .button {
+            font-family: 'Lucida Sans';
+            margin-top: 30px;
+            height: 40px;
+            width: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 11px;
+            position: relative;
+            background-color: rgb(64, 64, 64);
+            color: rgb(222, 219, 219);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: -1;
+            border-radius: 15px;
+            border: 3px, solid, rgb(64, 64, 64);
+            transition: top, left, right, bottom, 100ms, ease-in-out;
+        }
+
+        .button:hover::before,
+        .button:focus:before {
+            top: calc(2px * -2);
+            bottom: calc(2px * -2);
+            left: calc(2px * -2);
+            right: calc(2px * -2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="signal" id="red"></div>
+        <div class="signal" id="yellow"></div>
+        <div class="signal" id="green"></div>
+    </div>
+    <div class="button" id="button">Random Signal</div>
+    <div class="buttons">
+        <button class="button" id="red-button">Red</button>
+        <button class="button" id="yellow-button">Yellow</button>
+        <button class="button" id="green-button">Green</button>
+    </div>
+    <script>
+        document.getElementById("red-button").addEventListener("click", function () {
+            document.getElementById("red").style.opacity = 1;
+            document.getElementById("red").style.boxShadow = "0px 0px 50px rgba(200, 0, 0, 0.9)";
+            document.getElementById("yellow").style.opacity = 0.3;
+            document.getElementById("yellow").style.boxShadow = "none";
+            document.getElementById("green").style.opacity = 0.3;
+            document.getElementById("green").style.boxShadow = "none";
+        });
+        document.getElementById("yellow-button").addEventListener("click", function () {
+            document.getElementById("yellow").style.opacity = 1;
+            document.getElementById("yellow").style.boxShadow = "0px 0px 50px rgba(200, 200, 0, 0.9)";
+            document.getElementById("red").style.opacity = 0.3;
+            document.getElementById("red").style.boxShadow = "none";
+            document.getElementById("green").style.opacity = 0.3;
+            document.getElementById("green").style.boxShadow = "none";
+        });
+        document.getElementById("green-button").addEventListener("click", function () {
+            document.getElementById("green").style.opacity = 1;
+            document.getElementById("green").style.boxShadow = "0px 0px 50px rgba(0, 200, 0, 0.9)";
+            document.getElementById("red").style.opacity = 0.3;
+            document.getElementById("red").style.boxShadow = "none";
+            document.getElementById("yellow").style.opacity = 0.3;
+            document.getElementById("yellow").style.boxShadow = "none";
+        });
+        document.getElementById("button").addEventListener("click", function () {
+            let random = Math.floor(Math.random() * 3) + 1;
+            switch (random) {
+                case 1:
+                    document.getElementById("red").style.opacity = 1;
+                    document.getElementById("red").style.boxShadow = "0px 0px 50px rgba(200, 0, 0, 0.9)";
+                    document.getElementById("yellow").style.opacity = 0.3;
+                    document.getElementById("yellow").style.boxShadow = "none";
+                    document.getElementById("green").style.opacity = 0.3;
+                    document.getElementById("green").style.boxShadow = "none";
+                    break;
+                case 2:
+                    document.getElementById("yellow").style.opacity = 1;
+                    document.getElementById("yellow").style.boxShadow = "0px 0px 50px rgba(200, 200, 0, 0.9)";
+                    document.getElementById("red").style.opacity = 0.3;
+                    document.getElementById("red").style.boxShadow = "none";
+                    document.getElementById("green").style.opacity = 0.3;
+                    document.getElementById("green").style.boxShadow = "none";
+                    break;
+                case 3:
+                    document.getElementById("green").style.opacity = 1;
+                    document.getElementById("green").style.boxShadow = "0px 0px 50px rgba(0, 200, 0, 0.9)";
+                    document.getElementById("red").style.opacity = 0.3;
+                    document.getElementById("red").style.boxShadow = "none";
+                    document.getElementById("yellow").style.opacity = 0.3;
+                    document.getElementById("yellow").style.boxShadow = "none";
+                    break;
+            }
+        }); 
+    </script>
+</body>
+
+</html>

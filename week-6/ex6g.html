@@ -1,0 +1,419 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Question 7</title> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+ 
+    <style> 
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); 
+ 
+        * { 
+            margin: 0; 
+            padding: 0; 
+        } 
+ 
+        body { 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            font-family: "Poppins"; 
+            background-color: bisque; 
+        } 
+ 
+        .container { 
+            border-radius: 15px; 
+            box-shadow: 0px 0px 15px black; 
+            background-color: #FFF; 
+        } 
+ 
+        .head { 
+            background-color: black; 
+            color: white; 
+            font-size: 50px; 
+            text-align: center; 
+            border-top-left-radius: 15px; 
+            border-top-right-radius: 15px; 
+        } 
+ 
+        .webcam-container { 
+            padding: 40px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        } 
+ 
+ 
+ 
+        #webcam { 
+            width: 100%; 
+            height: auto; 
+            border-radius: 15px; 
+        } 
+ 
+        .controls { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 10px; 
+            margin: 10px; 
+        } 
+ 
+        .btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 12px 20px; 
+            font-size: 14px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            background-color: black; 
+            color: white; 
+        } 
+ 
+        .btn:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px); 
+        } 
+ 
+        .btn:disabled { 
+            background-color: #ccc; 
+            cursor: not-allowed; 
+            transform: none; 
+        } 
+ 
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 15px; 
+            padding: 20px; 
+            background-color: #f9f9f9; 
+            border-top: 1px solid #eee; 
+            border-bottom-right-radius: 15px; 
+            border-bottom-left-radius: 15px; 
+        } 
+ 
+        .gallery-item { 
+            position: relative; 
+            overflow: hidden; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+            background-color: white; 
+            width: 100%; 
+            height: 150px; 
+            object-fit: cover; 
+            display: block; 
+        } 
+ 
+        .gallery-actions { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background-color: rgba(0, 0, 0, 0.5); 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 8px; 
+        } 
+ 
+        .gallery-btn { 
+            background-color: transparent; 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            font-size: 14px; 
+        } 
+ 
+        .status { 
+            margin-top: 10px; 
+            padding: 8px; 
+            border-radius: 4px; 
+            text-align: center; 
+            font-weight: bold; 
+        } 
+ 
+        .status.recording { 
+            background-color: rgba(234, 67, 53, 0.1); 
+            color: #ea4335; 
+            animation: pulse 1.5s infinite; 
+        } 
+ 
+        @keyframes pulse { 
+            0% { 
+                opacity: 1; 
+            } 
+            50% { 
+                opacity: 0.5; 
+            } 
+            100% { 
+                opacity: 1; 
+            } 
+        } 
+ 
+        .record-timer { 
+            margin-top: 10px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            color: #ea4335; 
+        } 
+ 
+        .no-webcam { 
+            padding: 40px; 
+            text-align: center; 
+            background-color: #f8f8f8; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+        } 
+ 
+        .hidden { 
+            display: none; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+    <div class="container"> 
+        <div class="head">Webcam</div> 
+ 
+        <div class="webcam-container"> 
+            <video id="webcam" autoplay playsinline></video> 
+ 
+            <div id="errorMessage" class="no-webcam hidden"> 
+                <h3>Unable to access webcam</h3> 
+                <p>Please make sure you have a webcam connected and have granted permission to use it.</p> 
+            </div> 
+ 
+            <div class="controls"> 
+                <button id="startBtn" class="btn btn-primary">Start Camera</button> 
+                <button id="snapshotBtn" class="btn btn-success" disabled>Take Snapshot</button> 
+                <button id="recordBtn" class="btn btn-danger" disabled>Start Recording</button> 
+            </div> 
+ 
+            <div id="recordingStatus" class="status hidden"></div> 
+            <div id="recordTimer" class="record-timer hidden">00:00</div> 
+        </div> 
+ 
+        <div id="gallery" class="gallery"></div> 
+    </div> 
+ 
+    <script> 
+        document.addEventListener('DOMContentLoaded', function () { 
+            const webcamElement = document.getElementById('webcam'); 
+            const startBtn = document.getElementById('startBtn'); 
+            const snapshotBtn = document.getElementById('snapshotBtn'); 
+            const recordBtn = document.getElementById('recordBtn'); 
+            const errorMessage = document.getElementById('errorMessage'); 
+            const recordingStatus = document.getElementById('recordingStatus'); 
+            const recordTimer = document.getElementById('recordTimer'); 
+            const gallery = document.getElementById('gallery'); 
+ 
+            let stream = null; 
+            let mediaRecorder = null; 
+            let recordedChunks = []; 
+            let isRecording = false; 
+            let recordingInterval = null; 
+            let recordingSeconds = 0; 
+ 
+        
+     startBtn.addEventListener('click', async () => { 
+                try { 
+                    if (stream) { 
+                        stream.getTracks().forEach(track => track.stop()); 
+                        webcamElement.srcObject = null; 
+                        stream = null; 
+ 
+                        startBtn.innerHTML = `Start Camera`; 
+                        snapshotBtn.disabled = true; 
+                        recordBtn.disabled = true; 
+                        switchCameraBtn.disabled = true; 
+ 
+                        return; 
+                    } 
+ 
+                    stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: true, 
+                        audio: true 
+                    }); 
+ 
+                    webcamElement.srcObject = stream; 
+                    errorMessage.classList.add('hidden'); 
+ 
+                    startBtn.innerHTML = `Stop Camera`; 
+                    snapshotBtn.disabled = false; 
+                    recordBtn.disabled = false; 
+                    switchCameraBtn.disabled = false; 
+ 
+                } catch (error) { 
+                    console.error('Error accessing the webcam:', error); 
+                    errorMessage.classList.remove('hidden'); 
+                } 
+            }); 
+ 
+            snapshotBtn.addEventListener('click', () => { 
+                if (!stream) return; 
+ 
+                const canvas = document.createElement('canvas'); 
+                canvas.width = webcamElement.videoWidth; 
+                canvas.height = webcamElement.videoHeight; 
+ 
+                const ctx = canvas.getContext('2d'); 
+                ctx.drawImage(webcamElement, 0, 0, canvas.width, canvas.height); 
+ 
+                const imageDataURL = canvas.toDataURL('image/png'); 
+ 
+                addImageToGallery(imageDataURL); 
+            }); 
+ 
+            recordBtn.addEventListener('click', () => { 
+                if (!stream) return; 
+ 
+                if (isRecording) { 
+                    mediaRecorder.stop(); 
+                    isRecording = false; 
+ 
+                    recordBtn.innerHTML = `Start Recording`; 
+                    recordingStatus.classList.add('hidden'); 
+                    recordTimer.classList.add('hidden'); 
+ 
+                    clearInterval(recordingInterval); 
+                    recordingSeconds = 0; 
+ 
+                } else { 
+                    recordedChunks = []; 
+ 
+                    const options = { mimeType: 'video/webm;codecs=vp9,opus' }; 
+                    try { 
+                        mediaRecorder = new MediaRecorder(stream, options); 
+                    } catch (e) { 
+                        console.error('MediaRecorder error:', e); 
+                        try { 
+                            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' }); 
+                        } catch (e2) { 
+                            console.error('MediaRecorder error with fallback:', e2); 
+                            alert('Recording is not supported in this browser'); 
+                            return; 
+                        } 
+                    } 
+ 
+                    mediaRecorder.ondataavailable = (event) => { 
+                        if (event.data.size > 0) { 
+                            recordedChunks.push(event.data); 
+                        } 
+                    }; 
+ 
+                    mediaRecorder.onstop = () => { 
+                        const blob = new Blob(recordedChunks, { type: 'video/webm' }); 
+                        const videoURL = URL.createObjectURL(blob); 
+ 
+                        addVideoToGallery(videoURL); 
+                    }; 
+ 
+                    mediaRecorder.start(100); 
+                    isRecording = true; 
+ 
+                    recordBtn.innerHTML = `Stop Recording`; 
+                    recordingStatus.textContent = 'Recording..'; 
+                    recordingStatus.classList.remove('hidden'); 
+                    recordingStatus.classList.add('recording'); 
+                    recordTimer.classList.remove('hidden'); 
+ 
+                    recordingInterval = setInterval(updateRecordingTime, 1000); 
+                } 
+            }); 
+ 
+            function addImageToGallery(imageURL) { 
+                const item = document.createElement('div'); 
+                item.className = 'gallery-item'; 
+ 
+                const img = document.createElement('img'); 
+                img.className = 'gallery-item'; 
+                img.src = imageURL; 
+                img.alt = 'Captured photo'; 
+ 
+                const actions = document.createElement('div'); 
+                actions.className = 'gallery-actions'; 
+ 
+                const downloadBtn = document.createElement('button'); 
+                downloadBtn.className = 'gallery-btn'; 
+                downloadBtn.textContent = 'Download'; 
+                downloadBtn.addEventListener('click', () => { 
+                    const link = document.createElement('a'); 
+                    link.href = imageURL; 
+                    link.download = `snapshot_${new Date().toISOString()}.png`; 
+                    link.click(); 
+                }); 
+ 
+                const deleteBtn = document.createElement('button'); 
+                deleteBtn.className = 'gallery-btn'; 
+                deleteBtn.textContent = 'Delete'; 
+                deleteBtn.addEventListener('click', () => { 
+                    gallery.removeChild(item); 
+                }); 
+ 
+                actions.appendChild(downloadBtn); 
+                actions.appendChild(deleteBtn); 
+ 
+                item.appendChild(img); 
+                item.appendChild(actions); 
+ 
+                gallery.prepend(item); 
+            } 
+ 
+            function addVideoToGallery(videoURL) { 
+                const item = document.createElement('div'); 
+                item.className = 'gallery-item'; 
+ 
+                const video = document.createElement('video'); 
+                video.className = 'gallery-item'; 
+                video.src = videoURL; 
+                video.controls = true; 
+ 
+                const actions = document.createElement('div'); 
+                actions.className = 'gallery-actions'; 
+ 
+                const downloadBtn = document.createElement('button'); 
+                downloadBtn.className = 'gallery-btn'; 
+                downloadBtn.textContent = 'Download'; 
+                downloadBtn.addEventListener('click', () => { 
+                    const link = document.createElement('a'); 
+                    link.href = videoURL; 
+                    link.download = `recording_${new Date().toISOString()}.webm`; 
+                    link.click(); 
+                }); 
+ 
+                const deleteBtn = document.createElement('button'); 
+                deleteBtn.className = 'gallery-btn'; 
+                deleteBtn.textContent = 'Delete'; 
+                deleteBtn.addEventListener('click', () => { 
+                    gallery.removeChild(item); 
+                    URL.revokeObjectURL(videoURL); 
+                }); 
+ 
+                actions.appendChild(downloadBtn); 
+                actions.appendChild(deleteBtn); 
+ 
+                item.appendChild(video); 
+                item.appendChild(actions); 
+ 
+                gallery.prepend(item); 
+            } 
+ 
+            function updateRecordingTime() { 
+                recordingSeconds++; 
+                const minutes = Math.floor(recordingSeconds / 60); 
+                const seconds = recordingSeconds % 60; 
+                recordTimer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`; 
+            } 
+        }); 
+    </script> 
+</body> 
+</html> 

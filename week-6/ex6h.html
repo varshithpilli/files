@@ -1,0 +1,185 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Question 8</title> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+ 
+    <style> 
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); 
+        * { 
+            margin: 0; 
+            padding: 0; 
+        } 
+ 
+        body { 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #222; 
+            color: white; 
+        } 
+ 
+        .container { 
+            height: auto; 
+            width: 350px; 
+            text-align: center; 
+            padding: 30px; 
+            border-radius: 15px; 
+            background: rgba(255, 255, 255, 0.1); 
+            border: 1px solid gray; 
+        } 
+ 
+        .button-container { 
+            margin: 20px; 
+        } 
+ 
+        #toggleButton { 
+            background: linear-gradient(90deg, red, brown, orange); 
+            border: none; 
+            color: white; 
+            padding: 15px 40px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            border-radius: 50px; 
+            transition: 0.3s; 
+            box-shadow: 0px 0px 10px rgba(255, 60, 60, 0.5); 
+        } 
+ 
+        #toggleButton:hover { 
+            box-shadow: 0px 0px 20px rgba(255, 140, 0, 0.7); 
+            transform: scale(1.05); 
+        } 
+ 
+        #toggleButton.off { 
+            background: linear-gradient(45deg, #4CAF50, #45a049); 
+            box-shadow: 0px 0px 10px rgba(76, 175, 80, 0.5); 
+        } 
+ 
+        #toggleButton.off:hover { 
+            box-shadow: 0px 0px 20px rgba(69, 160, 73, 0.7); 
+        } 
+ 
+        #status { 
+            font-size: 16px; 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+        } 
+ 
+        .error { 
+            color: #ff5757; 
+            margin-top: 15px; 
+            font-size: 14px; 
+        } 
+ 
+        #videoPreview { 
+            display: none; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+    <div class="container"> 
+        <h1>Flashlight Toggle</h1> 
+ 
+        <div class="button-container"> 
+            <button id="toggleButton">Turn On</button> 
+        </div> 
+ 
+        <div id="status">Status: OFF</div> 
+        <div id="error" class="error"></div> 
+ 
+        <video id="videoPreview" autoplay muted playsinline></video> 
+    </div> 
+ 
+    <script> 
+        document.addEventListener('DOMContentLoaded', () => { 
+            const toggleButton = document.getElementById('toggleButton'); 
+            const statusElement = document.getElementById('status'); 
+            const errorElement = document.getElementById('error'); 
+            const videoElement = document.getElementById('videoPreview'); 
+ 
+            let stream = null; 
+            let track = null; 
+            let flashlightOn = false; 
+ 
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { 
+                errorElement.textContent = 'Your browser does not support flashlight access.'; 
+                toggleButton.disabled = true; 
+                return; 
+            } 
+ 
+            toggleButton.addEventListener('click', async () => { 
+                try { 
+                    if (!flashlightOn) { 
+                        stream = await navigator.mediaDevices.getUserMedia({ 
+                            video: { 
+                                facingMode: 'environment', 
+                                advanced: [{ torch: true }] 
+                            } 
+                        }); 
+ 
+                        videoElement.srcObject = stream; 
+                        track = stream.getVideoTracks()[0]; 
+ 
+                        const capabilities = track.getCapabilities(); 
+ 
+                        if (capabilities.torch) { 
+                            await track.applyConstraints({ advanced: [{ torch: true }] }); 
+                            flashlightOn = true; 
+                            updateUI(true); 
+                        } else { 
+                            errorElement.textContent = 'Flashlight is not supported on your device.'; 
+                            stopStream(); 
+                        } 
+                    } else { 
+                        if (track) { 
+                            await track.applyConstraints({ advanced: [{ torch: false }] }); 
+                        } 
+                        stopStream(); 
+                        flashlightOn = false; 
+                        updateUI(false); 
+                    } 
+                } catch (error) { 
+                    console.error('Error:', error); 
+                    errorElement.textContent = `Error: ${error.message || 'Camera permission is required.'}`; 
+                    stopStream(); 
+                    flashlightOn = false; 
+                    updateUI(false); 
+                } 
+            }); 
+ 
+            function stopStream() { 
+                if (stream) { 
+                    stream.getTracks().forEach(track => track.stop()); 
+                    videoElement.srcObject = null; 
+                    stream = null; 
+                    track = null; 
+                } 
+            } 
+ 
+ 
+ 
+ 
+            function updateUI(isOn) { 
+                if (isOn) { 
+                    toggleButton.textContent = 'Turn Off Flashlight'; 
+                    toggleButton.classList.add('off'); 
+                    statusElement.textContent = 'Status: Flashlight is ON'; 
+                    errorElement.textContent = ''; 
+                } else { 
+                    toggleButton.textContent = 'Turn On Flashlight'; 
+                    toggleButton.classList.remove('off'); 
+                    statusElement.textContent = 'Status: Flashlight is OFF'; 
+                } 
+            } 
+        }); 
+    </script> 
+</body> 
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Question 6</title> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+    <style> 
+        * { 
+            margin: 0; 
+            padding: 0; 
+        } 
+ 
+        body { 
+            font-family: 'Segoe UI'; 
+            background-color: bisque; 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+        } 
+ 
+        .head { 
+            margin-bottom: 25px; 
+            font-size: 20px; 
+            font-weight: 500; 
+        } 
+ 
+        .container { 
+            color: whitesmoke; 
+            height: auto; 
+            padding: 10px; 
+            background-color: black; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 25px; 
+        } 
+ 
+        #main-area { 
+            font-size: 70px; 
+            height: 300px; 
+            width: 200px; 
+            text-align: center; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 15px; 
+        } 
+ 
+        #button { 
+            font-size: 25px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-top: 10px; 
+            background-color: #B07357; 
+            height: 100px; 
+            width: 200px; 
+            border-radius: 15px; 
+        } 
+ 
+        #button:hover { 
+            cursor: pointer; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+    <div class="head">How are you feeling today?</div> 
+    <div class="container"> 
+        <div id="main-area">Trial emoji</div> 
+        <div id="button">Emoji</div> 
+    </div> 
+ 
+    <script> 
+        const emojis = [
+  "🤩", "😂", "😎", "😍", "🎨",
+  "🤩", "😆", "🤔", "😇", "🤖",
+  "🥚", "😴", "😈", "👽", "🤖",
+  "🎃", "🔥", "🌈", "💀", "🚀"
+];
+
+ 
+        document.getElementById("button").addEventListener("click", function () { 
+            const emoji = Math.floor(Math.random() * 20); 
+            document.getElementById("main-area").innerText = emojis[emoji] 
+ 
+        }); 
+    </script> 
+</body> 
+</html>

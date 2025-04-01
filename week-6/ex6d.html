@@ -1,0 +1,123 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Question 4</title> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+    <style> 
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        } 
+ 
+        body { 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: #ffdb4d; 
+        } 
+ 
+        .goggles { 
+            display: flex; 
+            justify-content: space-between; 
+            position: relative; 
+            padding: 20px; 
+            border-radius: 50px; 
+        } 
+         
+        .goggle-1{ 
+            width: 50vh; 
+            height: 50vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 50%; 
+            border: 50px grey solid; 
+        } 
+         
+        .goggle-2{ 
+            width: 50vh; 
+            height: 50vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 50%; 
+            border: 50px grey solid; 
+        } 
+ 
+ 
+ 
+ 
+        .eye { 
+            width: 100%; 
+            height: 100%; 
+            background: white; 
+            border-radius: 50%; 
+            position: relative; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border: 5px solid black; 
+        } 
+ 
+        .pupil { 
+            width: 30%; 
+            height: 30%; 
+            background: black; 
+            border-radius: 50%; 
+            position: absolute; 
+        } 
+ 
+        .band{ 
+            position: fixed; 
+            height: 100px; 
+            width: 100vw; 
+            background: linear-gradient(90deg, black,black, black, #ffdb4d , black, black, black); 
+            background-color: black; 
+            z-index: -1; 
+        } 
+    </style> 
+</head> 
+<body> 
+ 
+    <div class="goggles"> 
+        <div class="goggle-1"> 
+            <div class="eye"> 
+                <div class="pupil" id="pupil1"></div> 
+            </div> 
+        </div> 
+        <div class="goggle-2"> 
+            <div class="eye"> 
+                <div class="pupil" id="pupil2"></div> 
+            </div> 
+        </div> 
+    </div> 
+    <div class="band"> 
+ 
+    </div> 
+ 
+    <script> 
+        document.addEventListener("mousemove", (event) => { 
+            const eyes = document.querySelectorAll(".eye"); 
+            eyes.forEach((eye) => { 
+                const pupil = eye.querySelector(".pupil"); 
+                const rect = eye.getBoundingClientRect(); 
+                const eyeX = rect.left + rect.width / 2; 
+                const eyeY = rect.top + rect.height / 2; 
+                const deltaX = event.clientX - eyeX; 
+                const deltaY = event.clientY - eyeY; 
+                const angle = Math.atan2(deltaY, deltaX); 
+                const distance = Math.min(25, Math.hypot(deltaX, deltaY) / 10); 
+ 
+                pupil.style.transform = `translate(${distance * Math.cos(angle)}px, ${distance * Math.sin(angle)}px)`; 
+            }); 
+        }); 
+    </script> 
+ 
+</body> 
+</html>

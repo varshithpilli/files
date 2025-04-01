@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Question 4</title> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+    <style> 
+        * { 
+            padding: 0; 
+            margin: 0; 
+        } 
+ 
+        body { 
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, 
+Verdana, sans-serif; 
+            background-color: #FFDCCC; 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+        } 
+ 
+        canvas { 
+            background-color: white; 
+            border: 3px solid black; 
+            margin-top: 20px; 
+        } 
+ 
+        button { 
+            margin: 5px; 
+            padding: 10px; 
+            font-size: 16px; 
+            border: none; 
+            outline: none; 
+            background-color: #B7B1F2; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+ 
+    <h1>Draw Shapes on Canvas</h1> 
+    <div class="options"> 
+        <button onclick="drawRectangle()">Rectangle</button> 
+        <button onclick="drawCircle()">Circle</button> 
+        <button onclick="drawTriangle()">Triangle</button> 
+        <button onclick="clearCanvas()">Clear</button> 
+    </div> 
+    <canvas id="myCanvas" height="500px" width="500px"></canvas> 
+ 
+ 
+    <script> 
+        const canvas = document.getElementById('myCanvas'); 
+        const ctx = canvas.getContext('2d'); 
+ 
+        function getRandomInt(min, max) { 
+            return Math.floor(Math.random() * (max - min + 1)) + min; 
+        } 
+ 
+        function drawRectangle() { 
+            let x = getRandomInt(0, canvas.width - 150); 
+            let y = getRandomInt(0, canvas.height - 100); 
+            ctx.fillStyle = 'blue'; 
+            ctx.fillRect(x, y, 150, 100); 
+        } 
+ 
+        function drawCircle() { 
+            let radius = 50; 
+            let x = getRandomInt(radius, canvas.width - radius); 
+            let y = getRandomInt(radius, canvas.height - radius); 
+            ctx.fillStyle = 'red'; 
+            ctx.beginPath(); 
+            ctx.arc(x, y, radius, 0, Math.PI * 2); 
+            ctx.fill(); 
+        } 
+ 
+        function drawTriangle() { 
+            let x1 = getRandomInt(50, canvas.width - 50); 
+            let y1 = getRandomInt(50, canvas.height - 50); 
+            let x2 = x1 - 50; 
+            let y2 = y1 + 100; 
+            let x3 = x1 + 50; 
+            let y3 = y1 + 100; 
+ 
+            ctx.fillStyle = 'green'; 
+            ctx.beginPath(); 
+            ctx.moveTo(x1, y1); 
+            ctx.lineTo(x2, y2); 
+            ctx.lineTo(x3, y3); 
+            ctx.closePath(); 
+            ctx.fill(); 
+        } 
+ 
+        function clearCanvas() { 
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        } 
+    </script> 
+ 
+</body> 
+</html> 

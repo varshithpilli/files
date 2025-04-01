@@ -1,0 +1,101 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Question 1</title> 
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+    <style> 
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); 
+ 
+        * { 
+            margin: 0; 
+            padding: 0; 
+        } 
+ 
+        body { 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background-color: #FAD0C4; 
+        } 
+ 
+        .container { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 400px; 
+            background: radial-gradient(#C599B6, #E6B2BA); 
+            border-radius: 20px; 
+            font-family: "Poppins"; 
+            font-weight: 400; 
+            font-style: normal; 
+            font-size: 100px; 
+            padding: 20px; 
+            width: 850px; 
+            cursor: pointer; 
+            color: #F7F7F7; 
+            transition: opacity 2s ease-in-out; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+    <div class="container" id="textContainer"> 
+        <div id="time">00:00 AM</div> 
+        <div id="date" style="opacity: 0; position: absolute;">00, 00 000</div> 
+    </div> 
+ 
+ 
+ 
+    <script> 
+        const months = [ 
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December" 
+        ]; 
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; 
+ 
+        function updateTimeAndDate() { 
+            const now = new Date(); 
+            let hours = now.getHours(); 
+            let minutes = now.getMinutes(); 
+            let day = days[now.getDay()]; 
+            let date = now.getDate(); 
+            let month = months[now.getMonth()]; 
+            let ampm = hours >= 12 ? "PM" : "AM"; 
+ 
+            hours = hours % 12 || 12; 
+            minutes = minutes < 10 ? "0" + minutes : minutes; 
+ 
+            document.getElementById('time').innerText = hours + ":" + minutes + " " + ampm; 
+            document.getElementById('date').innerText = day + ", " + date + " " + month; 
+        } 
+ 
+        updateTimeAndDate(); 
+ 
+        const textContainer = document.getElementById("textContainer"); 
+        const clock = document.getElementById("time"); 
+        const date = document.getElementById("date"); 
+ 
+        textContainer.addEventListener("mouseenter", () => { 
+            clock.style.opacity = "0"; 
+            date.style.opacity = "1"; 
+        }); 
+ 
+        textContainer.addEventListener("mouseleave", () => { 
+            clock.style.opacity = "1"; 
+            date.style.opacity = "0"; 
+        }); 
+ 
+        setInterval(updateTimeAndDate, 1000); 
+    </script> 
+ 
+</body> 
+ 
+</html>

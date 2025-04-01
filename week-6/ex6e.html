@@ -1,0 +1,185 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Question 5</title> 
+    <link rel="icon" href="apple-touch-icon.png">
+
+ 
+        <style> 
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); 
+            * { 
+                margin: 0; 
+                padding: 0; 
+            } 
+ 
+            body { 
+                height: 100vh; 
+                width: 100vw; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                font-family: "Poppins"; 
+                background-color: bisque; 
+            } 
+ 
+            .slider-container { 
+                position: relative; 
+                height: 600px; 
+                width: 700px; 
+                overflow: hidden; 
+                border-radius: 15px; 
+                box-shadow: 0px 0px 20px darkgray; 
+            }         
+ 
+            .slider { 
+                position: absolute; 
+                height: 100%; 
+                width: 100%; 
+                transition: transform 0.5s ease-in-out; 
+            }             
+ 
+            .slide { 
+                position: absolute; 
+                height: 100%; 
+                width: 100%; 
+                object-fit: cover; 
+                opacity: 0; 
+                transition: opacity 0.5s ease-in-out; 
+            }            
+ 
+            .slide.active { 
+                opacity: 1; 
+            }            
+ 
+            .controls { 
+                position: absolute; 
+                top: 50%; 
+                right: 20px; 
+                display: flex; 
+                flex-direction: column; 
+                gap: 10px; 
+                transform: translateY(-50%); 
+                z-index: 10; 
+            }            
+ 
+            .control-btn { 
+                height: 40px; 
+                width: 40px; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                font-size: 20px; 
+                background-color: rgba(255, 255, 255, 0.7); 
+                border: none; 
+                border-radius: 50%; 
+                cursor: pointer; 
+                transition: background-color 0.3s; 
+            }             
+ 
+            .control-btn:hover { 
+                background-color: rgba(255, 255, 255, 0.9); 
+            }             
+ 
+            .indicators { 
+                position: absolute; 
+                top: 50%; 
+                left: 20px; 
+                display: flex; 
+                flex-direction: column; 
+                gap: 10px; 
+                transform: translateY(-50%); 
+                z-index: 10; 
+            }          
+ 
+            .indicator { 
+                height: 12px; 
+                width: 12px; 
+                border-radius: 50%; 
+                background-color: rgba(255, 255, 255, 0.5); 
+                cursor: pointer; 
+                transition: background-color 0.3s; 
+            } 
+ 
+            .indicator.active { 
+                background-color: rgba(255, 255, 255, 1); 
+                transform: scale(1.2); 
+            } 
+        </style> 
+    </head> 
+ 
+ 
+    <body> 
+        <div class="slider-container"> 
+            <div class="slider"> 
+                <img src="./assignment_files/slide1.jpg" alt="Slide 1" class="slide active"> 
+                <img src="./assignment_files/slide2.jpg" alt="Slide 2" class="slide"> 
+                <img src="./assignment_files/slide3.jpg" alt="Slide 3" class="slide"> 
+                <img src="./assignment_files/slide4.jpg" alt="Slide 4" class="slide"> 
+                <img src="./assignment_files/slide5.jpg" alt="Slide 5" class="slide"> 
+            </div> 
+             
+            <div class="controls"> 
+                <button class="control-btn up-btn">↑</button> 
+                <button class="control-btn down-btn">↓</button> 
+            </div> 
+             
+            <div class="indicators"> 
+                <div class="indicator active" data-index="0"></div> 
+                <div class="indicator" data-index="1"></div> 
+                <div class="indicator" data-index="2"></div> 
+                <div class="indicator" data-index="3"></div> 
+                <div class="indicator" data-index="4"></div> 
+            </div> 
+        </div> 
+ 
+        <script> 
+            document.addEventListener('DOMContentLoaded', function() { 
+                const slides = document.querySelectorAll('.slide'); 
+                const upBtn = document.querySelector('.up-btn'); 
+                const downBtn = document.querySelector('.down-btn'); 
+                const indicators = document.querySelectorAll('.indicator'); 
+                 
+                let currentSlide = 0; 
+                const totalSlides = slides.length; 
+                 
+                 
+                upBtn.addEventListener('click', prevSlide); 
+                function prevSlide() { 
+                    showSlide(currentSlide - 1); 
+                } 
+                 
+                downBtn.addEventListener('click', nextSlide); 
+                function nextSlide() { 
+                    showSlide(currentSlide + 1); 
+                } 
+                 
+                indicators.forEach(indicator => { 
+                    indicator.addEventListener('click', function() { 
+                        const slideIndex = parseInt(this.getAttribute('data-index')); 
+                        showSlide(slideIndex); 
+                    }); 
+                }); 
+ 
+                function showSlide(index) { 
+                    if (index < 0) index = totalSlides - 1; 
+                    if (index >= totalSlides) index = 0; 
+                     
+                    slides.forEach(slide => { 
+                        slide.classList.remove('active'); 
+                    }); 
+                     
+                    indicators.forEach(indicator => { 
+                        indicator.classList.remove('active'); 
+                    }); 
+                     
+                    slides[index].classList.add('active'); 
+                    indicators[index].classList.add('active'); 
+                     
+                    currentSlide = index; 
+                } 
+            }); 
+            </script> 
+    </body> 
+</html> 
